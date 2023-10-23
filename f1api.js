@@ -7,7 +7,7 @@ export default class F1ApiClient {
         this.rootUrl = 'https://ergast.com/api/f1';
     }
     async getDrivers() {
-        let response = await this.axios.get(`${this.rootUrl}/drivers.json?limit=100`)
+        let response = await axios.get(`${this.rootUrl}/drivers.json?limit=100`)
         return response.data;
     }
     async getSeasons() {
@@ -16,23 +16,35 @@ export default class F1ApiClient {
     }
 
     async getSeason(season) {
-        let response = await this.axios.get(`${this.rootUrl}/${season}.json`)
+        let response = await axios.get(`${this.rootUrl}/${season}.json`)
+        return response.data.MRData.RaceTable.Races;
+    }
+
+    async getSeasonRaces(season) {
+        let response = await axios.get(`${this.rootUrl}/${season}/results.json`)
         return response.data;
     }
 
-    async getSeasonRaces() {
-        let response = await this.axios.get(`${this.rootUrl}/${season}/results.json`)
+    async getSeasonRace(season, round) {
+        let response = await axios.get(`${this.rootUrl}/${season}/${round}/results.json`)
         return response.data;
     }
 
-    async getSeasonRace() {
-        let response = await this.axios.get(`${this.rootUrl}/${season}/${round}/results.json`)
+    async getSeasonRaceQualifying(season, round) {
+        let response = await axios.get(`${this.rootUrl}/${season}/${round}/qualifying.json`)
         return response.data;
     }
 
-    async getSeasonRaceQualifying() {
-        let response = await this.axios.get(`${this.rootUrl}/${season}/${round}/qualifying.json`)
-        return response.data;
+    async getDrivers(season) {
+        if (season) {
+            let response = await axios.get(`${this.rootUrl}/${season}/drivers.json?limit=100`)
+            return response.data;
+        }
+        else {
+
+            let response = await axios.get(`${this.rootUrl}/drivers.json?limit=100`)
+            return response.data;
+        }
     }
 
 }
